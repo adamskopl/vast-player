@@ -1,0 +1,12 @@
+#video-container {
+  width: 50vw;
+  height: 50vh;
+}
+
+#vast-video {
+  width: 100%;
+}
+
+#error-display {
+  color: red;
+}

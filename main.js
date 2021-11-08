@@ -3,31 +3,45 @@ import { play } from './player.js';
 const App = {
   data() {
     return {
-      vastURLChoice: 'test',
-      videoSrc:
-        'https://iab-publicfiles.s3.amazonaws.com/vast/VAST-4.0-Short-Intro.mp4',
+      vidErrorMessage: '',
+      vastURLChoice: '',
+      videoSrc: '',
       vastURLExamples: [
         'https://raw.githubusercontent.com/InteractiveAdvertisingBureau/VAST_Samples/master/VAST%204.2%20Samples/Category-test.xml',
         'https://raw.githubusercontent.com/InteractiveAdvertisingBureau/VAST_Samples/master/VAST%204.2%20Samples/Inline_Simple.xml',
         'https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dskippablelinear&correlator=[timestamp]',
       ],
-      ondurationchange(x) {
-        console.warn(x);
-      },
     };
   },
   methods: {
-    reverseMessage() {
-      console.warn('REVERSE');
-      this.message = this.message.split('').reverse().join('');
+    ondurationchange(x) {},
+    async onExampleClicked(vastUrl) {
+      this.playVast(vastUrl);
     },
-    onPlayClicked() {
-      this.videoSrc =
-        'https://iab-publicfiles.s3.amazonaws.com/vast/VAST-4.0-Short-Intro.mp4';
+    onPlayClicked() {},
+    async playVast(vastURL) {
+      this.vastURLChoice = vastURL;
+      try {
+        const $vid = document.querySelector('#vast-video');
+        this.vidErrorMessage = '';
+        this.unloadVideo();
+        this.videoSrc = await play(vastURL);
+        $vid.load();
+        $vid.play();
+      } catch (e) {
+        this.vidErrorMessage = e.toString();
+        this.unloadVideo();
+      }
     },
-    second() {
-      console.warn('SECONDE');
+    unloadVideo() {
+      const $vid = document.querySelector('#vast-video');
+      $vid.pause();
+      this.videoSrc = '';
+      $vid.load();
     },
+  },
+  mounted() {
+    this.onExampleClicked(this.vastURLExamples[2]);
   },
 };
 

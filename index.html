@@ -1,33 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>vast player</title>
-  <script src="node_modules/vue/dist/vue.global.js"></script>
-  <script src="node_modules/@dailymotion/vast-client/dist/vast-client-browser.min.js"></script>
-  <script src="main.js" type="module"></script>
-</head>
-<body>
-<div id="app">
+  <head>
+    <meta charset="UTF-8" />
+    <title>vast player</title>
+    <link href="styles.css" rel="stylesheet" />
+    <link href="loaders.css" rel="stylesheet" />
+    <script src="node_modules/vue/dist/vue.global.js"></script>
+    <script src="node_modules/@dailymotion/vast-client/dist/vast-client-browser.min.js"></script>
+    <script src="main.js" type="module"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h1>VAST Player</h1>
+      <div id="video-container">
+        <video id="vast-video" autoplay muted>
+          <source :src="videoSrc" />
+        </video>
+        <span id="error-display" v-if="vidErrorMessage">
+          {{ vidErrorMessage }}
+        </span>
+      </div>
+      <div>
+        <label for="vast-source">Source URL</label>
+        <input id="vast-source" v-model="vastURLChoice" />
+        <button v-on:click="onPlayClicked" id="btn-play">Play</button>
+      </div>
 
-  <h1>VAST Player</h1>
-  <div id="video-container">
-    <video @durationchange="ondurationchange">
-      <source :src="videoSrc">
-    </video>
-  </div>
-  <div>
-    <label for="vast-source">Source URL</label>
-    <input id="vast-source" v-model="vastURLChoice"/>
-    <button v-on:click="onPlayClicked" id="btn-play">Play</button>
-  </div>
+      <ul>
+        <li v-for="(vastURL, index) in vastURLExamples">
+          <button @click="onExampleClicked(vastURL)">example{{ index }}</button>
+        </li>
+      </ul>
+    </div>
 
-  <ul>
-    <li v-for="(vastURL, index) in vastURLExamples">
-      <a :href="vastURL">example {{ index }}</a>
-    </li>
-  </ul>
-
-</div>
-</body>
+    <div class="lds-facebook" style="background: black">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </body>
 </html>
