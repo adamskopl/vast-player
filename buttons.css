@@ -1,0 +1,58 @@
+/* https://github.com/astrit/css.gg */
+
+:root {
+  --ggs: 4;
+}
+
+.gg-play-pause-o {
+  box-sizing: border-box;
+  position: relative;
+  display: block;
+  transform: scale(var(--ggs));
+  width: 22px;
+  height: 22px;
+  border: 2px solid;
+  border-radius: 22px;
+  color: white;
+}
+
+.gg-play-pause-o::before {
+  content: '';
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  left: 6px;
+  top: 6px;
+  border-left: 2px solid;
+  border-right: 2px solid;
+  color: white;
+}
+
+.gg-play-button-o {
+  box-sizing: border-box;
+  position: relative;
+  display: block;
+  transform: scale(var(--ggs, 4));
+  width: 22px;
+  height: 22px;
+  border: 2px solid;
+  border-radius: 20px;
+  color: white;
+}
+
+.gg-play-button-o::before {
+  content: '';
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  width: 0;
+  height: 10px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 6px solid;
+  top: 4px;
+  left: 7px;
+  color: white;
+}
