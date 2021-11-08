@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>vast player</title>
+  <script src="node_modules/vue/dist/vue.global.js"></script>
+  <script src="node_modules/@dailymotion/vast-client/dist/vast-client-browser.min.js"></script>
+  <script src="main.js" type="module"></script>
+</head>
+<body>
+<div id="app">
+
+  <h1>VAST Player</h1>
+  <div id="video-container">
+    <video @durationchange="ondurationchange">
+      <source :src="videoSrc">
+    </video>
+  </div>
+  <div>
+    <label for="vast-source">Source URL</label>
+    <input id="vast-source" v-model="vastURLChoice"/>
+    <button v-on:click="onPlayClicked" id="btn-play">Play</button>
+  </div>
+
+  <ul>
+    <li v-for="(vastURL, index) in vastURLExamples">
+      <a :href="vastURL">example {{ index }}</a>
+    </li>
+  </ul>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "adamsko-vast-player",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "live-server . --ignore-path=node_modules"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@dailymotion/vast-client": "^3.3.0",
+    "vue": "^3.2.21"
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "singleQuote": true
+  }
+}
+
+
