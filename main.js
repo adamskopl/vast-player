@@ -1,5 +1,5 @@
 import { play } from './player.js';
-import { handler } from './playerStatesHandler';
+import { handler } from './playerStatesHandler.js';
 
 Vue.component('video-overlay-loading', {
   template: '#videoOverlayLoading',
@@ -9,23 +9,21 @@ Vue.component('video-overlay-loading', {
 Vue.component('video-overlay-controls', {
   template: '#videoOverlayControls',
   props: ['state'], // LOADING | PLAYING | PAUSED
-  methods: {
-    onClick() {
-      console.warn('ON CLICK');
-    },
-  },
 });
 
 const app = new Vue({
   el: '#app',
   data() {
     return {
-      overlay: {
-        loading: false,
-        errorMessage: '',
+      controls: {
+        show: false,
+        state: '', // PLAYING | PAUSED
       },
-      state: STATES.LOADING,
-      STATES,
+      overlay: {
+        errorMessage: '',
+        loading: false,
+      },
+      progressValue: 0,
       vastURLChoice: '',
       vastURLExamples: [
         'https://raw.githubusercontent.com/InteractiveAdvertisingBureau/VAST_Samples/master/VAST%204.2%20Samples/Category-test.xml',
@@ -37,7 +35,7 @@ const app = new Vue({
   },
   methods: {
     onExampleClicked(vastURL) {
-      handler.onVideoChoice(vastURL);
+      handler.onVastChoice(vastURL);
       // this.vastURLChoice = vastURL;
       // this.onPlayClicked(vastURL);
     },
@@ -72,13 +70,15 @@ const app = new Vue({
     },
     vidOnCanPlay() {
       console.warn('@canplay');
-      getVideoEl().play();
+      // getVideoEl().play();
     },
     vidOnCanPlayThrough() {
       console.warn('@canplaythrough');
+      handler.onVidCanPlayThrough();
     },
     vidOnEnded() {
       console.warn('@ended');
+      handler.onEnded();
     },
     vidOnLoadedData() {
       console.warn('@loadeddata');
@@ -95,7 +95,8 @@ const app = new Vue({
     vidOnStalled() {
       console.warn('@stalled');
     },
-    onVideoContainerClicked() {
+    onVidClicked() {
+      handler.onVidClicked();
       // this.state = this.state === 'PAUSED' ? 'PLAYING' : 'PAUSED';
     },
   },
@@ -104,7 +105,3 @@ const app = new Vue({
     handler.init(this);
   },
 });
-
-function getVideoEl() {
-  return document.querySelector('#vast-video');
-}

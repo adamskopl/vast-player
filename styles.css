@@ -1,7 +1,11 @@
 #video-container {
   position: relative;
   width: 50vw;
-  height: 50vh;
+  /*height: 50vh;*/
+}
+
+progress {
+  width: 100%;
 }
 
 #vast-video {
@@ -35,6 +39,7 @@
   visibility: hidden;
 }
 
-.video-overlay-controls:hover i {
+.video-overlay-controls:hover i,
+.video-overlay-controls i.always-show {
   visibility: visible;
 }

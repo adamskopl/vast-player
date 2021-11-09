@@ -1,54 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>vast player</title>
-    <link href="styles.css" rel="stylesheet" />
-    <link href="loaders.css" rel="stylesheet" />
-    <link href="buttons.css" rel="stylesheet" />
-    <script src="node_modules/vue/dist/vue.min.js"></script>
-    <script src="node_modules/@dailymotion/vast-client/dist/vast-client-browser.min.js"></script>
-    <script src="main.js" type="module"></script>
-  </head>
-  <body>
-    <div id="app">
-      <h1>VAST Player</h1>
-      <div id="video-container" @click="onVideoContainerClicked">
-        <video
-          @abort="vidOnAbort"
-          @canplay="vidOnCanPlay"
-          @canplaythrough="vidOnCanPlayThrough"
-          @ended="vidOnEnded"
-          @loadeddata="vidOnLoadedData"
-          @loadstart="vidOnLoadStart"
-          @pause="vidOnPause"
-          @play="vidOnPlay"
-          @stalled="vidOnStalled"
-          id="vast-video"
-        >
-          <source :src="videoSrc" />
-        </video>
+<head>
+  <meta charset="UTF-8"/>
+  <title>vast player</title>
+  <link href="styles.css" rel="stylesheet"/>
+  <link href="loaders.css" rel="stylesheet"/>
+  <link href="buttons.css" rel="stylesheet"/>
+  <script src="node_modules/vue/dist/vue.min.js"></script>
+  <script src="node_modules/@dailymotion/vast-client/dist/vast-client-browser.min.js"></script>
+  <script src="main.js" type="module"></script>
+</head>
+<body>
+<div id="app">
+  <h1>VAST Player</h1>
+  <div id="video-container" @click="onVidClicked">
+    <video
+      @abort="vidOnAbort"
+      @canplay="vidOnCanPlay"
+      @canplaythrough="vidOnCanPlayThrough"
+      @ended="vidOnEnded"
+      @loadeddata="vidOnLoadedData"
+      @loadstart="vidOnLoadStart"
+      @pause="vidOnPause"
+      @play="vidOnPlay"
+      @stalled="vidOnStalled"
+      id="vast-video"
+    >
+      <source :src="videoSrc"/>
+    </video>
 
-        <!--        <video-overlay-loading-->
-        <!--          :error-message="overlay.errorMessage"-->
-        <!--          :loading="overlay.loading"-->
-        <!--        ></video-overlay-loading>-->
-        <!--        -->
-        <!--        <video-overlay-controls :state="state"></video-overlay-controls>-->
-      </div>
-      <div>
-        <label for="vast-source">Source URL</label>
-        <input id="vast-source" v-model="vastURLChoice" />
-        <button v-on:click="onPlayClicked" id="btn-play">Play</button>
-      </div>
+    <progress max="100" :value="progressValue"></progress>
 
-      <ul>
-        <li v-for="(vastURL, index) in vastURLExamples">
-          <button @click="onExampleClicked(vastURL)">example{{ index }}</button>
-        </li>
-      </ul>
-    </div>
-  </body>
+    <video-overlay-loading
+      :error-message="overlay.errorMessage"
+      :loading="overlay.loading"
+    ></video-overlay-loading>
+
+    <video-overlay-controls
+      :state="controls.state"
+    ></video-overlay-controls>
+  </div>
+  <div>
+    <label for="vast-source">Source URL</label>
+    <input id="vast-source" v-model="vastURLChoice"/>
+    <button v-on:click="onPlayClicked" id="btn-play">Play</button>
+  </div>
+
+  <ul>
+    <li v-for="(vastURL, index) in vastURLExamples">
+      <button @click="onExampleClicked(vastURL)">example{{ index }}</button>
+    </li>
+  </ul>
+</div>
+</body>
 </html>
 
 <template id="videoOverlayLoading">
@@ -67,15 +71,8 @@
 
 <template id="videoOverlayControls">
   <div class="video-overlay video-overlay-controls">
-    <i
-      @click="onClick"
-      v-if="state === 'PLAYING'"
-      class="gg-play-pause-o clickable"
-    ></i>
-    <i
-      @click="onClick"
-      v-if="state === 'PAUSED'"
-      class="gg-play-button-o clickable"
-    ></i>
+    <i v-if="state === 'PLAYING'" class="gg-play-pause-o"></i>
+    <i v-if="state === 'PAUSED'" class="gg-play-button-o"></i>
+    <i v-if="state === 'ENDED'" class="gg-play-button-o always-show"></i>
   </div>
 </template>
