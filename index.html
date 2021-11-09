@@ -5,20 +5,36 @@
     <title>vast player</title>
     <link href="styles.css" rel="stylesheet" />
     <link href="loaders.css" rel="stylesheet" />
-    <script src="node_modules/vue/dist/vue.global.js"></script>
+    <link href="buttons.css" rel="stylesheet" />
+    <script src="node_modules/vue/dist/vue.min.js"></script>
     <script src="node_modules/@dailymotion/vast-client/dist/vast-client-browser.min.js"></script>
     <script src="main.js" type="module"></script>
   </head>
   <body>
     <div id="app">
       <h1>VAST Player</h1>
-      <div id="video-container">
-        <video id="vast-video" autoplay muted>
+      <div id="video-container" @click="onVideoContainerClicked">
+        <video
+          @abort="vidOnAbort"
+          @canplay="vidOnCanPlay"
+          @canplaythrough="vidOnCanPlayThrough"
+          @ended="vidOnEnded"
+          @loadeddata="vidOnLoadedData"
+          @loadstart="vidOnLoadStart"
+          @pause="vidOnPause"
+          @play="vidOnPlay"
+          @stalled="vidOnStalled"
+          id="vast-video"
+        >
           <source :src="videoSrc" />
         </video>
-        <span id="error-display" v-if="vidErrorMessage">
-          {{ vidErrorMessage }}
-        </span>
+
+        <!--        <video-overlay-loading-->
+        <!--          :error-message="overlay.errorMessage"-->
+        <!--          :loading="overlay.loading"-->
+        <!--        ></video-overlay-loading>-->
+        <!--        -->
+        <!--        <video-overlay-controls :state="state"></video-overlay-controls>-->
       </div>
       <div>
         <label for="vast-source">Source URL</label>
@@ -32,11 +48,34 @@
         </li>
       </ul>
     </div>
+  </body>
+</html>
 
-    <div class="lds-facebook" style="background: black">
+<template id="videoOverlayLoading">
+  <div
+    v-if="errorMessage || loading"
+    class="video-overlay video-overlay-loading"
+  >
+    <span id="error-display" v-if="errorMessage"> {{ errorMessage }} </span>
+    <div v-if="loading" class="lds-facebook">
       <div></div>
       <div></div>
       <div></div>
     </div>
-  </body>
-</html>
+  </div>
+</template>
+
+<template id="videoOverlayControls">
+  <div class="video-overlay video-overlay-controls">
+    <i
+      @click="onClick"
+      v-if="state === 'PLAYING'"
+      class="gg-play-pause-o clickable"
+    ></i>
+    <i
+      @click="onClick"
+      v-if="state === 'PAUSED'"
+      class="gg-play-button-o clickable"
+    ></i>
+  </div>
+</template>

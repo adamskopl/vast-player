@@ -1,48 +1,110 @@
 import { play } from './player.js';
+import { handler } from './playerStatesHandler';
 
-const App = {
+Vue.component('video-overlay-loading', {
+  template: '#videoOverlayLoading',
+  props: ['errorMessage', 'loading'],
+});
+
+Vue.component('video-overlay-controls', {
+  template: '#videoOverlayControls',
+  props: ['state'], // LOADING | PLAYING | PAUSED
+  methods: {
+    onClick() {
+      console.warn('ON CLICK');
+    },
+  },
+});
+
+const app = new Vue({
+  el: '#app',
   data() {
     return {
-      vidErrorMessage: '',
+      overlay: {
+        loading: false,
+        errorMessage: '',
+      },
+      state: STATES.LOADING,
+      STATES,
       vastURLChoice: '',
-      videoSrc: '',
       vastURLExamples: [
         'https://raw.githubusercontent.com/InteractiveAdvertisingBureau/VAST_Samples/master/VAST%204.2%20Samples/Category-test.xml',
         'https://raw.githubusercontent.com/InteractiveAdvertisingBureau/VAST_Samples/master/VAST%204.2%20Samples/Inline_Simple.xml',
         'https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dskippablelinear&correlator=[timestamp]',
       ],
+      videoSrc: '',
     };
   },
   methods: {
-    ondurationchange(x) {},
-    async onExampleClicked(vastUrl) {
-      this.playVast(vastUrl);
+    onExampleClicked(vastURL) {
+      handler.onVideoChoice(vastURL);
+      // this.vastURLChoice = vastURL;
+      // this.onPlayClicked(vastURL);
     },
-    onPlayClicked() {},
+    onPlayClicked() {
+      this.playVast(this.vastURLChoice);
+    },
     async playVast(vastURL) {
-      this.vastURLChoice = vastURL;
       try {
-        const $vid = document.querySelector('#vast-video');
-        this.vidErrorMessage = '';
+        this.overlay.errorMessage = '';
+        this.overlay.loading = true;
         this.unloadVideo();
         this.videoSrc = await play(vastURL);
-        $vid.load();
-        $vid.play();
+        getVideoEl().load();
       } catch (e) {
-        this.vidErrorMessage = e.toString();
+        this.overlay.errorMessage = e.toString();
+        this.overlay.loading = false;
         this.unloadVideo();
       }
     },
     unloadVideo() {
-      const $vid = document.querySelector('#vast-video');
-      $vid.pause();
+      getVideoEl().pause();
       this.videoSrc = '';
-      $vid.load();
+      // $vid.load();
+    },
+    play() {
+      console.warn('');
+      this.overlay.loading = false;
+      this.state = 'PAUSED';
+    },
+    vidOnAbort() {
+      console.warn('@abort');
+    },
+    vidOnCanPlay() {
+      console.warn('@canplay');
+      getVideoEl().play();
+    },
+    vidOnCanPlayThrough() {
+      console.warn('@canplaythrough');
+    },
+    vidOnEnded() {
+      console.warn('@ended');
+    },
+    vidOnLoadedData() {
+      console.warn('@loadeddata');
+    },
+    vidOnLoadStart() {
+      console.warn('@loadstart');
+    },
+    vidOnPause() {
+      console.warn('@pause');
+    },
+    vidOnPlay() {
+      console.warn('@play');
+    },
+    vidOnStalled() {
+      console.warn('@stalled');
+    },
+    onVideoContainerClicked() {
+      // this.state = this.state === 'PAUSED' ? 'PLAYING' : 'PAUSED';
     },
   },
   mounted() {
-    this.onExampleClicked(this.vastURLExamples[2]);
+    // this.onExampleClicked(this.vastURLExamples[2]);
+    handler.init(this);
   },
-};
+});
 
-Vue.createApp(App).mount('#app');
+function getVideoEl() {
+  return document.querySelector('#vast-video');
+}

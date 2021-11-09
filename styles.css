@@ -1,12 +1,40 @@
 #video-container {
+  position: relative;
   width: 50vw;
   height: 50vh;
 }
 
 #vast-video {
   width: 100%;
+  display: block;
 }
 
 #error-display {
   color: red;
+}
+
+.video-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  font-size: 2rem;
+}
+
+.video-overlay-loading {
+  background-color: black;
+}
+
+.video-overlay-controls i {
+  visibility: hidden;
+}
+
+.video-overlay-controls:hover i {
+  visibility: visible;
 }

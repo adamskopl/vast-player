@@ -10,12 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "@dailymotion/vast-client": "^3.3.0",
-    "vue": "^3.2.21"
+    "vue": "^2.6.14"
   },
   "prettier": {
     "tabWidth": 2,
     "singleQuote": true
   }
 }
-
-
