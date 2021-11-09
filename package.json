@@ -15,5 +15,8 @@
   "prettier": {
     "tabWidth": 2,
     "singleQuote": true
+  },
+  "devDependencies": {
+    "live-server": "^1.2.1"
   }
 }
